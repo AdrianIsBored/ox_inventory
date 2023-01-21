@@ -119,9 +119,6 @@ function Weapon.Disarm(currentWeapon, noAnim)
 		Utils.ItemNotify({currentWeapon.metadata.label or currentWeapon.label, currentWeapon.metadata.image or currentWeapon.name, 'ui_holstered'})
 		TriggerEvent('ox_inventory:currentWeapon')
 	end
-
-	Utils.WeaponWheel()
-	RemoveAllPedWeapons(cache.ped, true)
 end
 
 function Weapon.ClearAll(currentWeapon)

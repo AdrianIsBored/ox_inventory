@@ -29,7 +29,6 @@ local playerPed = cache.ped
 
 lib.onCache('ped', function(ped)
 	playerPed = ped
-	Utils.WeaponWheel()
 end)
 
 plyState:set('invBusy', true, false)
@@ -485,8 +484,6 @@ function OnPlayerData(key, val)
 		currentWeapon = Weapon.Disarm(currentWeapon)
 		client.closeInventory()
 	end
-
-	Utils.WeaponWheel()
 end
 
 -- People consistently ignore errors when one of the "modules" failed to load
@@ -994,7 +991,6 @@ local function setStateBagHandler(stateId)
 	end)
 
 	AddStateBagChangeHandler('dead', stateId, function(_, _, value)
-		Utils.WeaponWheel()
 		PlayerData.dead = value
 	end)
 
@@ -1011,8 +1007,6 @@ lib.onCache('seat', function(seat)
 			return Utils.WeaponWheel(true)
 		end
 	end
-
-	Utils.WeaponWheel(false)
 end)
 
 RegisterNetEvent('ox_inventory:setPlayerInventory', function(currentDrops, inventory, weight, player, source)

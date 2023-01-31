@@ -132,7 +132,7 @@ function client.openInventory(inv, data)
 				right = {
 					type = 'crafting',
 					id = data.id,
-					label = data.label or locale('crafting_bench'),
+					label = right.label or locale('crafting_bench'),
 					index = data.index,
 					slots = right.slots,
 					items = right.items,
@@ -293,7 +293,7 @@ local function useItem(data, cb)
 		local success, response = pcall(cb, result and slotData)
 
 		if not success and response then
-			print(('^1An error occurred while calling item "%s" callback!\n^1SCRIPT ERROR: %s^0'):format(result.name, response))
+			print(('^1An error occurred while calling item "%s" callback!\n^1SCRIPT ERROR: %s^0'):format(slotData.name, response))
 		end
 	end
 
@@ -501,21 +501,21 @@ local function registerCommands()
 		description = locale('open_player_inventory'),
 		defaultKey = client.keys[1],
 		onPressed = function()
-			if not invOpen then
-				local closest = lib.points.closest()
-
-				if closest and closest.currentDistance < 1.2 then
-					if closest.inv == 'crafting' then
-						return client.openInventory('crafting', { id = closest.id, index = closest.index })
-					elseif closest.inv ~= 'license' and closest.inv ~= 'policeevidence' then
-						return client.openInventory(closest.inv or 'drop', { id = closest.invId, type = closest.type })
-					end
-				end
-
-				return client.openInventory()
+			if invOpen then
+				return client.closeInventory()
 			end
 
-			client.closeInventory()
+			local closest = lib.points.closest()
+
+			if closest and closest.currentDistance < 1.2 and (not closest.instance or closest.instance == currentInstance) then
+				if closest.inv == 'crafting' then
+					return client.openInventory('crafting', { id = closest.id, index = closest.index })
+				elseif closest.inv ~= 'license' and closest.inv ~= 'policeevidence' then
+					return client.openInventory(closest.inv or 'drop', { id = closest.invId, type = closest.type })
+				end
+			end
+
+			return client.openInventory()
 		end
 	})
 
